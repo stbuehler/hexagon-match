@@ -21,22 +21,7 @@
 </head>
 <body style="-moz-user-select: none;">
 
-	<div class="fitscreen vbox end">
-		<div style="background-color: red">X</div>
-		<div style="background-color: blue">Y</div>
-	</div>
-
-
-<!--
-	<div class="fitscreen vbox center">
-		<div class="hbox">
-			<div class="boxFlex">Menu and stuff</div>
-		</div>
-		<div class="" style="background-color: red">X
-			<div id="field" class="hmContainer ui-layout-center"></div>
-		</div>
-	</div>
--->
+	<div id="field" class="fitscreen hmContainer"></div>
 
 	<script type="text/javascript">
 		var board, boardcontrol;
@@ -54,26 +39,10 @@
 			board.level = levels[0];
 		}
 		$(document).ready(function () {
-			return;
-			var layout;
-			layout = $('body').layout({
-				defaults: {
-					closable: false,
-					resizable: false,
-					slidable: false,
-					spacing_open: 0,
-					spacing_closed: 0,
-				},
-				center: {
-					onresize: function() {
-						var container = document.getElementById('field');
-						board.resize(container.clientWidth, container.clientHeight);
-					},
-				},
-			});
 			loadBoard();
 			window.onresize = function() {
-				layout.resizeAll();
+				var container = document.getElementById('field');
+				board.resize(container.clientWidth, container.clientHeight);
 			};
 		});
 	</script>

@@ -475,7 +475,10 @@ hm.Board.prototype = {
 
 	_loadStorage: function() {
 		this._loadingStorage = true;
-		var data = window.localStorage && window.localStorage.getItem(this._levelid);
+		var data;
+		try {
+			data = window.localStorage && window.localStorage.getItem(this._levelid);
+		} catch (e) { }
 		var s = this._storage = (data && window.JSON.parse(data)) || { };
 		s.marks = s.marks || [];
 		if (s.marks) {
@@ -488,6 +491,9 @@ hm.Board.prototype = {
 
 	_saveStorage: function() {
 		if (this._loadingStorage) return;
+		try {
+			if (!window.localStorage) return;
+		} catch (e) { return; }
 		var l, m, i;
 		if (!this.cheated && window.localStorage) {
 			l = [];
@@ -496,7 +502,9 @@ hm.Board.prototype = {
 				l.push([m.sx, m.sy, m.direction, m.tag]);
 			}
 			this._storage.marks = l;
-			window.localStorage.setItem(this._levelid, window.JSON.stringify(this._storage));
+			try {
+				window.localStorage.setItem(this._levelid, window.JSON.stringify(this._storage));
+			} catch (e) { }
 		}
 	},
 };
