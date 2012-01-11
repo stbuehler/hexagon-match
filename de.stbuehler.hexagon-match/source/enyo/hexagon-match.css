@@ -1,0 +1,19 @@
+
+.enyo-header .enyo-header-inner {
+	padding-top: 8px; padding-bottom: 8px;
+}
+.enyo-header .enyo-header-inner .enyo-button {
+	margin-top: 0px; margin-bottom: 0px;
+}
+
+.hmContainer {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+.hmContainer .hmCanvas {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

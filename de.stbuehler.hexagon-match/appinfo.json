@@ -1,0 +1,15 @@
+{
+	"id": "de.stbuehler.hexagon-match",
+	"version": "1.0.0",
+	"type": "web",
+	"main": "index.html",
+	"uiRevision": 2,
+	"title": "Hexagon Match",
+	"vendor": "Stefan Bühler",
+	"vendorurl": "http://hexagon-match.stbuehler.de",
+	"copyright": "© Copyright 2011 Stefan Bühler",
+	"support": {
+		"url": "http://hexagon-match.stbuehler.de",
+		"email": { "address": "palm-dev@stbuehler.de", "subject": "[Hexagon Match support]" }
+	}
+}

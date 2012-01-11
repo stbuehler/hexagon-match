@@ -1,0 +1,82 @@
+
+body {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.hmContainer {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+.hmContainer .hmCanvas {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+
+.hbox, .vbox {
+	display: -webkit-box;
+	-webkit-box-sizing: border-box;
+	-webkit-box-align: stretch;
+
+	display: -moz-box;
+	-moz-box-sizing: border-box;
+	-moz-box-align: stretch;
+
+	display: box;
+	box-sizing: border-box;
+	box-align: stretch;
+}
+
+.vbox {
+	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
+	box-orient: vertical;
+}
+.hbox {
+	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
+	box-orient: horizontal;
+}
+.boxFlex1, .boxFlex {
+	-webkit-box-flex: 1 !important;
+	-moz-box-flex: 1 !important;
+	box-flex: 1 !important;
+}
+
+.hbox> *, .vbox> * {
+	-webkit-box-flex: 0;
+	-moz-box-flex: 0;
+	box-flex: 0;
+//	display: block;
+}
+
+.fitscreen {
+	position: absolute !important;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+
+.start {
+	-webkit-box-pack: start;
+	-moz-box-pack: start;
+	box-pack: start;
+}
+ 
+.end {
+	-webkit-box-pack: end;
+	-moz-box-pack: end;
+	box-pack: end;
+}
+ 
+.center {
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	box-pack: center;
+}
