@@ -17,7 +17,7 @@ chromium:
 	chromium --allow-file-access-from-files de.stbuehler.hexagon-match/index.html
 
 override JSPATH=de.stbuehler.hexagon-match/source/lib
-node_search.js: ${JSPATH}/util.js ${JSPATH}/solver.js ${JSPATH}/edit.js node_search_append.js
+node_search.js: ${JSPATH}/util.js ${JSPATH}/solver.js ${JSPATH}/rate.js ${JSPATH}/edit.js node_search_append.js
 	cat $^ > $@
 
 node_search: node_search.js
