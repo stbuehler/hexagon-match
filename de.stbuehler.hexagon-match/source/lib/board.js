@@ -31,6 +31,7 @@ hm.Board.prototype = {
 		this.refresh();
 	},
 	refresh: function() {
+		var i, l, c;
 		if (!this._level || !this._theme) {
 			for (i = 0; i < hm.Board.LAYERS; i++) {
 				l = this._layers[i];
