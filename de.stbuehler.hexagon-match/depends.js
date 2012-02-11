@@ -6,6 +6,8 @@ enyo.depends(
 	"source/lib/solver.js",
 	"source/lib/edit.js",
 	"source/levels/levels.js",
+	"source/levels/mediumblock1.js",
+	"source/levels/mediumblock2.js",
 	"source/levels/testblock1.js",
 	"source/levels/testblock2.js",
 	"source/levels/testblock3.js",
