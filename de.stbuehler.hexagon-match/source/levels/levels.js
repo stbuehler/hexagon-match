@@ -5,6 +5,7 @@ function AddLevelPack(prefix, width, height, colors, data) {
 	for (i = 0; i < data.length; i++) {
 		levels.push({
 			title: prefix + " - " + (i + 1),
+			set: prefix,
 			width: width,
 			height: height,
 			colors: colors,
@@ -12,4 +13,3 @@ function AddLevelPack(prefix, width, height, colors, data) {
 		});
 	}
 }
-

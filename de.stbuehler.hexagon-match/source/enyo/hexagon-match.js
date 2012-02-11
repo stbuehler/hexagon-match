@@ -77,10 +77,22 @@ enyo.kind({
 });
 
 function levelSelectorItems() {
-	var items = [], i;
+	var items = [], i, setitems = [], curset, set;
 	for (i = 0; i < levels.length; i++) {
-		items.push({caption: levels[i].title, value: i });
+		set = levels[i].set;
+		if (set !== curset) {
+			if (setitems.length > 0) {
+				items.push({caption: curset, components: setitems });
+			}
+			setitems = [];
+			curset = set;
+		}
+		setitems.push({caption: levels[i].title, value: i,onclick:"_selectedLevel" });
 	}
+	if (setitems.length > 0) {
+		items.push({caption: curset || 'Undefined', components: setitems });
+	}
+	enyo.log("levels: %j", items);
 	return items;
 }
 
@@ -89,31 +101,38 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	components: [
 		{kind: enyo.PageHeader, components: [
-			{content: "Hexagon Match",flex:1},
+			{content: "Hexagon Match"},
+			{flex:1},
+			{name:"levelTitle",content: ""},
+			{flex:1},
 			{name:"themeSelector",kind: enyo.ListSelector,label:"Theme",value:"default",items: ["default"],onChange:"_selectedTheme",showing: false},
-			{name:"levelSelector",kind: enyo.ListSelector,label:"Level",value:0,items: levelSelectorItems(),onChange:"_selectedLevel"},
+			{name:"levelSelector",kind: enyo.Button,caption:"Change Level",onclick:"selectLevel"},
 			{kind: enyo.Button,caption: "Reset",onclick:"reset"},
 			{name:"solve",kind: enyo.Button,caption: "Solve",onclick:"solve",showing: false},
 		]},
 		{name: "board",kind: enyo.Control, layoutKind: enyo.VFlexLayout, flex:1, components: [
-			{name: "field",kind: hm.Field, level: levels[0], flex: 1 }
-		]}
+			{name: "field",kind: hm.Field, flex: 1 }
+		]},
+		{name:"levelMenu",kind: enyo.Menu,components: levelSelectorItems()},
 	],
 	create: function() {
 		this.inherited(arguments);
 		this.$.board.addClass("board");
+		this.setLevel(0);
 		if (enyo.args.cheat) this.$.solve.show();
 	},
+	selectLevel: function(inSender, inValue, inOldValue) {
+		this.$.levelMenu.openAroundControl(inSender, false, "right");
+	},
 	_selectedLevel: function(inSender, inValue, inOldValue) {
-		this.$.field.setLevel(levels[inValue]);
+		this.setLevel(inSender.value);
 	},
 	setLevel: function(level) {
 		if (typeof(level) == 'number') {
-			this.$.levelSelector.setValue(level);
-			this.$.field.setLevel(levels[level]);
-		} else {
-			this.$.field.setLevel(level);
+			level = levels[level];
 		}
+		this.$.levelTitle.setContent(level.title);
+		this.$.field.setLevel(level);
 	},
 	_selectedTheme: function(inSender, inValue, inOldValue) {
 		this.$.field.setTheme(inValue);
