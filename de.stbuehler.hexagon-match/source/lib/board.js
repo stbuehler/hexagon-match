@@ -1,6 +1,6 @@
 var hm = hm || {};
 
-hm.Board = function(canvaslayers, themeName) {
+hm.Board = function(canvaslayers, themeName, noStorage) {
 	this._layers = canvaslayers;
 	this.resize(canvaslayers[0].clientWidth, canvaslayers[0].clientHeight);
 	this._level = null;
@@ -8,6 +8,7 @@ hm.Board = function(canvaslayers, themeName) {
 	this._storage = { marks: [] };
 	this._marks = [];
 	this.cheated = false;
+	this.noStorage = noStorage;
 	this.theme = themeName;
 	this.highlight();
 };
@@ -345,7 +346,7 @@ hm.Board.prototype = {
 				this._occupied[m.ty][m.tx] = false;
 				this._usedcolors[m.tag] = false;
 				this._renderMarks();
-				return m;
+				break;
 			}
 		}
 		this._saveStorage();
@@ -475,6 +476,7 @@ hm.Board.prototype = {
 	},
 
 	_loadStorage: function() {
+		if (this.noStorage) return;
 		this._loadingStorage = true;
 		var data;
 		try {
@@ -491,6 +493,7 @@ hm.Board.prototype = {
 	},
 
 	_saveStorage: function() {
+		if (this.noStorage) return;
 		if (this._loadingStorage) return;
 		try {
 			if (!window.localStorage) return;
