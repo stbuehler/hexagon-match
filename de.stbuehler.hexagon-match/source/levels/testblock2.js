@@ -1,4 +1,4 @@
-AddLevelPack("Block 2", 9, 9, "BGORVY", [
+AddLevelPack(["Misc","2"], 9, 9, "BGORVY", [
 ["RGVGYYORR","OOBGOYGB "," VVY VYB "," VY  RB  ","  RBROB  ","  GBGO   ","   OGY   ","   VR    ","    V    "],
 ["YVBOGVRYR","OBYVBRVV "," YBR GGO "," YR  OV  ","  GOBBO  ","  YROG   ","   GGY   ","   RV    ","    B    "],
 ["YGYBRVOGV","RRYBRYYR "," OVO OOB "," VB  OG  ","  VBGYG  ","  VRGB   ","   GBV   ","   YR    ","    O    "],

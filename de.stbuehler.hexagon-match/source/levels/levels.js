@@ -1,15 +1,32 @@
 var levels = [];
+var levelGroups = { byName: {}, list: [] };
 
-function AddLevelPack(prefix, width, height, colors, data) {
+function AddLevelPack(group, width, height, colors, data) {
 	var i;
-	for (i = 0; i < data.length; i++) {
-		levels.push({
+
+	var g = levelGroups, gg;
+	for (i = 0; i < group.length; ++i) {
+		gg = g.byName[group[i]];
+		if (!gg) {
+			g.byName[group[i]] = gg = { title: group[i], byName: {}, list: [] };
+			g.list.push(gg);
+		}
+		g = gg;
+	}
+
+	g.levels = g.levels || [];
+
+	var prefix = group.join(' - '), l;
+	for (i = 0; i < data.length; ++i) {
+		l = {
 			title: prefix + " - " + (i + 1),
-			set: prefix,
+			short: ("00" + (i+1)).slice(-2),
 			width: width,
 			height: height,
 			colors: colors,
 			lines: data[i]
-		});
+		};
+		g.levels.push(levels.length);
+		levels.push(l);
 	}
 }

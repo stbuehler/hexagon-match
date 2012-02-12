@@ -1,4 +1,4 @@
-AddLevelPack("Medium A", 9, 9, "BGORVY", [
+AddLevelPack(["Medium","A"], 9, 9, "BGORVY", [
 ["RBYGBGBYY","VOOGROVO "," RYV GRR "," OV  BB  ","  RBVOG  ","  VYOG   ","   VBY   ","   RG    ","    Y    "],
 ["OOVVYBYYG","BBGVBOYR "," RVR RBY "," VG  GO  ","  OYVBG  ","  GRYO   ","   VGB   ","   RO    ","    R    "],
 ["BGROOVORB","BBOVRGOG "," BVB YGV "," YR  GO  ","  OVRYV  ","  VYGB   ","   GRY   ","   YR    ","    Y    "],

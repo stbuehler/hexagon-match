@@ -76,24 +76,214 @@ enyo.kind({
 	}
 });
 
-function levelSelectorItems() {
-	var items = [], i, setitems = [], curset, set;
-	for (i = 0; i < levels.length; i++) {
-		set = levels[i].set;
-		if (set !== curset) {
-			if (setitems.length > 0) {
-				items.push({caption: curset, components: setitems });
-			}
-			setitems = [];
-			curset = set;
+enyo.kind({
+	name: "SelectMenuGroup",
+	kind: enyo.Control,
+	published: {
+		caption: "",
+		open: false,
+	},
+	chrome: [
+		{name:"item",kind:enyo.Button,onclick:"selectPane"},
+		{name:"body",kind:enyo.VFlexBox,components: [
+			{name:"client",kind:enyo.HFlexBox},
+			{name:"content",kind:enyo.Pane,layoutKind:"",transitionKind: "enyo.transitions.Simple"}
+		]}
+	],
+	create: function() {
+		this.inherited(arguments);
+		this.$.body.isChrome = false;
+		this.captionChanged();
+		this._updateBodyContainer();
+	},
+	_select: function(element) {
+		if (this._selected) {
+			this._selected.setOpen(false);
 		}
-		setitems.push({caption: levels[i].title, value: i,onclick:"_selectedLevel" });
+		this._selected = element;
+		if (this._selected) {
+			this._selected.setOpen(true);
+		}
+	},
+	select: function(element) {
+		this._select(element);
+		this.selectPane();
+	},
+	selectPane: function() {
+		var c = this.menuContainer();
+		if (c) {
+			c.select(this);
+		}
+	},
+	adjustComponentProps: function(inProps) {
+		if (!inProps.kind) {
+			if (inProps.components && inProps.components.length > 0) {
+				inProps.kind = "SelectMenuGroup";
+			} else {
+				inProps.kind = enyo.Button;
+			}
+		}
+		this.inherited(arguments);
+	},
+	menuContainer: function() {
+		var node = this.container;
+		while (node && !node.getContentPane) {
+			node = node.container;
+		}
+		return node;
+	},
+	upperPane: function() {
+		var node = this.menuContainer();
+		if (node) return node.getContentPane();
+	},
+	_updateBodyContainer: function() {
+		if (this.$.body) {
+			var c = this.upperPane();
+			if (c) {
+				var first = (0 == c.getControls().length)
+				this.$.body.setContainer(c);
+				this.$.body.setParent(c);
+				if (first) this.selectPane();
+			} else {
+				this.$.body.setContainer(null);
+				this.$.body.setParent(null);
+			}
+			this.flow();
+		}
+	},
+	containerChanged: function() {
+		this.inherited(arguments);
+		this._updateBodyContainer();
+	},
+	captionChanged: function() {
+		this.$.item.setContent(this.caption);
+	},
+	openChanged: function() {
+		if (this.open) {
+			this.upperPane().selectView(this.$.body);
+		}
+		this.$.item.setDepressed(this.open);
+	},
+	rendered: function() {
+		this.inherited(arguments);
+	},
+	getContentPane: function() {
+		return this.$.content;
+	},
+});
+
+enyo.kind({
+	name: "SelectMenu",
+	kind: enyo.Popup,
+	events: {
+		onSelect: "",
+	},
+	chrome: [
+		{kind:enyo.VFlexBox,components: [
+			{name:"client",kind:enyo.HFlexBox},
+			{name:"content",kind:enyo.Pane,layoutKind:"",transitionKind: "enyo.transitions.Simple"}
+		]}
+	],
+	componentsReady: function() {
+		this.inherited(arguments);
+		this.flow();
+	},
+	select: function(element) {
+		if (this._selected) {
+			this._selected.setOpen(false);
+		}
+		this._selected = element;
+		if (this._selected) {
+			this._selected.setOpen(true);
+		}
+	},
+	_selectItem: function(inSender) {
+		if (this._selectedItem) {
+			this._selectedItem.setDepressed(false);
+		}
+		this._selectedItem = inSender;
+		if (this._selectedItem) {
+			this._selectedItem.setDepressed(true);
+		}
+	},
+	selectItem: function(inSender) {
+		this._selectItem(inSender);
+		this.close();
+		this.doSelect(this._selectedItem)
+	},
+	captureDomEvent: function(inEvent) {
+		if (inEvent.type != "click") return;
+
+		var node = inEvent.dispatchTarget;
+		while (node && node != this) {
+			if (node.hasOwnProperty('value')) {
+				this.selectItem(node);
+				break;
+			}
+			node = node.container;
+		}
+	},
+	_selectValue: function(node, value) {
+		if (node.hasOwnProperty('value')) {
+			if (value === node.value) {
+				this._selectItem(node);
+				while (node) {
+					if (node.selectPane) {
+						node.selectPane();
+						break;
+					}
+					node = node.container;
+				}
+				return true;
+			}
+			return false;
+		}
+		for (var i=0, cs=node.controls, c; c=cs[i]; i++) {
+			if (!c.isChrome) {
+				if (this._selectValue(c, value)) return true;
+			}
+		}
+		return false;
+	},
+	selectValue: function(value) {
+		this._selectValue(this, value);
+	},
+	adjustComponentProps: function(inProps) {
+		inProps.kind = inProps.kind || (inProps.components && inProps.components.length > 0 ? "SelectMenuGroup" : enyo.Button);
+		this.inherited(arguments);
+	},
+	published: {
+		value: undefined,
+	},
+	getContentPane: function() {
+		return this.$.content;
+	},
+});
+
+
+function levelSelectorItems() {
+	function group(items) {
+		//if (items.length <= 10) return items;
+		var r = [];
+		while (items.length > 0) {
+			r.push({kind:enyo.HFlexBox,components: items.splice(0, 10)});
+		}
+		return [{kind:enyo.VFlexBox,components:r}];
 	}
-	if (setitems.length > 0) {
-		items.push({caption: curset || 'Undefined', components: setitems });
+
+	function build(g) {
+		var i, r = [];
+		for (i = 0; i < g.list.length; ++i) {
+			r.push({caption: g.list[i].title, kind: SelectMenuGroup, components: build(g.list[i])});
+		}
+		if (g.levels) for (i = 0; i < g.levels.length; ++i) {
+			var ndx = g.levels[i];
+			r.push({caption: levels[ndx].short, value: ndx, kind: enyo.Button,onclick: "selectItem" });
+		}
+		return group(r);
 	}
-	enyo.log("levels: %j", items);
-	return items;
+
+	return build(levelGroups);
 }
 
 enyo.kind({
@@ -113,7 +303,7 @@ enyo.kind({
 		{name: "board",kind: enyo.Control, layoutKind: enyo.VFlexLayout, flex:1, components: [
 			{name: "field",kind: hm.Field, flex: 1 }
 		]},
-		{name:"levelMenu",kind: enyo.Menu,components: levelSelectorItems()},
+		{name:"levelMenu",kind: SelectMenu,components: levelSelectorItems(),onSelect: "_selectedLevel"},
 	],
 	create: function() {
 		this.inherited(arguments);
@@ -122,13 +312,19 @@ enyo.kind({
 		if (enyo.args.cheat) this.$.solve.show();
 	},
 	selectLevel: function(inSender, inValue, inOldValue) {
-		this.$.levelMenu.openAroundControl(inSender, false, "right");
+		if (this.$.levelMenu.canOpen()) {
+			this.$.levelMenu.openAroundControl(inSender, false, "right");
+			this.$.levelMenu.selectValue(this._levelNo);
+		} else {
+			this.$.levelMenu.close();
+		}
 	},
-	_selectedLevel: function(inSender, inValue, inOldValue) {
-		this.setLevel(inSender.value);
+	_selectedLevel: function(inSender, inItem) {
+		this.setLevel(inItem.value);
 	},
 	setLevel: function(level) {
 		if (typeof(level) == 'number') {
+			this._levelNo = level;
 			level = levels[level];
 		}
 		this.$.levelTitle.setContent(level.title);
