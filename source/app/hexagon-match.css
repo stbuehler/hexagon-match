@@ -1,0 +1,49 @@
+
+.enyo-header .enyo-header-inner {
+	padding-top: 8px; padding-bottom: 8px;
+}
+.enyo-header .enyo-header-inner .enyo-button {
+	margin-top: 0px; margin-bottom: 0px;
+}
+
+.hmContainer {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+.hmContainer .hmCanvas {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+/*	width: 100%;
+	height: 100%;*/
+}
+
+.hmCanvas.layer1 {
+	z-index: 1;
+}
+.hmCanvas.layer2 {
+	z-index: 3;
+}
+.hmCanvas.layer3 {
+	z-index: 3;
+}
+
+.hm-tab-panelsX {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+.hm-tab-panels {
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}

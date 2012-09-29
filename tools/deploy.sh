@@ -48,10 +48,10 @@ EOF
 mkdir -p "$TARGET/lib"
 
 # copy root folder files
-cp "$SOURCE/index.html" "$SOURCE/icon.png" "$TARGET"
+cp -ar "$SOURCE/index.html" "$SOURCE/icon.png" "$TARGET"
 
 # copy assets and build
-cp -r "$SOURCE/assets" "$SOURCE/build" "$TARGET"
+cp -ar "$SOURCE/assets" "$SOURCE/build" "$TARGET"
 
 for i in "$SOURCE/lib/"*; do
 	o=${i##*/}
@@ -63,3 +63,9 @@ for i in "$SOURCE/lib/"*; do
 		cp -r "$i" "$TARGET/lib"
 	fi
 done
+
+echo -n "sync to http://hexagon-match.stbuehler.de? (y/N)"
+read a
+if [ "x$a" == "xy" -o "x$a" == "xY" ]; then
+	rsync -av "$TARGET/" www-default@stbuehler.de:/var/www-hexagon/
+fi

@@ -1,0 +1,9 @@
+enyo.depends(
+	"boardcontrol.js",
+	"board.js",
+	"edit.js",
+	"rate.js",
+	"sha1.js",
+	"solver.js",
+	"util.js"
+);
